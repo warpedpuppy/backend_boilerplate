@@ -5,6 +5,7 @@ const jwtService = {
     createJwt(subject, payload) {
         return jwt.sign(payload, config.JWT_SECRET, {
           subject,
+          expiresIn: '7d',
           algorithm: 'HS256',
         })
     },

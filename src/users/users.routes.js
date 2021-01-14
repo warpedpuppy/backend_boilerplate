@@ -4,6 +4,8 @@ const jsonBodyParser = express.json();
 const UsersService = require('./users.services');
 const jwtService = require('./jwts.service');
 const requireAuth = require('../middleware/jwt-auth');
+const passport = require('passport');
+// require('./passport');
 
 usersRouter
 .get('/', (req, res) => res.send('voila'))
@@ -32,30 +34,10 @@ usersRouter
     }
  
 })
-.post('/login', jsonBodyParser, async (req, res) => {
-    const { username, password } = req.body;
-    if ( !username || !password ) {
-        res.status(400).json({status: 'missing data'})
-    }
-    let getUserData = await UsersService.hasUserWithUserName(username);
-    if (getUserData && getUserData.username) {
-        let checkPassword = await UsersService.comparePasswords(password, getUserData.password)
-        if (checkPassword) {
-            const sub = getUserData.username;
-            const payload = { userid: getUserData.id };
-            const token = jwtService.createJwt(sub, payload);
-            let user = UsersService.serializeUser(getUserData);
-            user.token = token;
-            res.status(200).json({user})
-        } else {
-            res.status(400).json({status: 'bad password'})
-        }
-    } else {
-        res.status(400).json({status: 'unknown user'})
-    }
-    
+.post('/login', jsonBodyParser, UsersService.passportLocalStrategy, async (req, res) => {
+    res.status(200).json({user:req.user})
 })
-.get('/profile', requireAuth, (req, res) => {
+.get('/profile',  passport.authenticate("jwt", { session: false }), (req, res) => {
     res.json({sucess: true, user: req.user})
 })
 module.exports = usersRouter;

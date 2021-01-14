@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const usersRouter = require('./users/users.routes');
 const mongoose = require('mongoose');
+require('./passport')
 app.use(cors());
 app.use(helmet());
 app.use('/users', usersRouter)

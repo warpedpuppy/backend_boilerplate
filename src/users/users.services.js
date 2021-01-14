@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const xss = require('xss')
 const User = require('../models/user-model');
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
-
+const passport = require('passport');
 const UsersService = {
   hasUserWithUserName(username) {
       return User.findOne({username})
@@ -12,6 +12,14 @@ const UsersService = {
   async insertUser(newUser) {
     let user = await User.create(newUser);
     return this.serializeUser(user)
+  },
+  passportLocalStrategy(req, res, next) {
+      passport.authenticate('local', function(err, user, info) {
+          if (err) { return next(err); }
+          if (!user) { return res.send(info.message); }
+          req.user = user;
+          return next()
+      })(req, res, next);
   },
   validatePassword(password) {
     // if (password.length < 8) {
