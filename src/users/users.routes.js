@@ -18,7 +18,7 @@ usersRouter
     if (passwordError) return res.status(400).json({error: passwordError})
 
     let hasUserName = await UsersService.hasUserWithUserName(username);
-    if (!hasUserName[0]) {
+    if (!hasUserName) {
         let hashedPassword = await UsersService.hashPassword(password);
         let insertSuccess = await UsersService.insertUser({username, password: hashedPassword, email})
         const sub = insertSuccess.username;
@@ -38,13 +38,13 @@ usersRouter
         res.status(400).json({status: 'missing data'})
     }
     let getUserData = await UsersService.hasUserWithUserName(username);
-    if (getUserData[0] && getUserData[0].username) {
-        let checkPassword = await UsersService.comparePasswords(password, getUserData[0].password)
+    if (getUserData && getUserData.username) {
+        let checkPassword = await UsersService.comparePasswords(password, getUserData.password)
         if (checkPassword) {
-            const sub = getUserData[0].username;
-            const payload = { userid: getUserData[0].id };
+            const sub = getUserData.username;
+            const payload = { userid: getUserData.id };
             const token = jwtService.createJwt(sub, payload);
-            let user = UsersService.serializeUser(getUserData[0]);
+            let user = UsersService.serializeUser(getUserData);
             user.token = token;
             res.status(200).json({user})
         } else {

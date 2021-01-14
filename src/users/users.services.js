@@ -5,7 +5,7 @@ const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*
 
 const UsersService = {
   hasUserWithUserName(username) {
-      return User.find({username})
+      return User.findOne({username})
       .then(name => name)
       .catch(error => console.error(error))
   },
