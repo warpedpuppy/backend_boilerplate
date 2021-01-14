@@ -3,6 +3,7 @@ const usersRouter = express.Router();
 const jsonBodyParser = express.json();
 const UsersService = require('./users.services');
 const jwtService = require('./jwts.service');
+const requireAuth = require('../middleware/jwt-auth');
 
 usersRouter
 .get('/', (req, res) => res.send('voila'))
@@ -54,7 +55,7 @@ usersRouter
     }
     
 })
-.get('/profile', (req, res) => {
-    res.send('restricted')
+.get('/profile', requireAuth, (req, res) => {
+    res.json({sucess: true, user: req.user})
 })
 module.exports = usersRouter;
