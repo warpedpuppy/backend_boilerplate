@@ -10,6 +10,7 @@ usersRouter
 .post('/register', jsonBodyParser, async (req, res) => {
 
     const {username, password, email} = req.body;
+    console.log(req.body)
 
     if (!username || !password || !email) {
         return res.status(400).json({error: `missing field in registration body`})
@@ -25,10 +26,10 @@ usersRouter
         const payload = { userid: insertSuccess.id };
         const token = jwtService.createJwt(sub, payload);
         insertSuccess.token = token;
-        res.status(200).json({insertSuccess})
+        res.status(200).json({success: true, data: insertSuccess})
 
     } else {
-        res.status(200).send("username already defined")
+        res.status(200).json({success: false, message: "username taken"})
     }
  
 })
@@ -46,12 +47,12 @@ usersRouter
             const token = jwtService.createJwt(sub, payload);
             let user = UsersService.serializeUser(getUserData);
             user.token = token;
-            res.status(200).json({user})
+            res.status(200).json({success: true, data: user})
         } else {
-            res.status(400).json({status: 'bad password'})
+            res.status(200).json({success: false, message: 'bad password'})
         }
     } else {
-        res.status(400).json({status: 'unknown user'})
+        res.status(200).json({success: false, message: 'unknown user'})
     }
     
 })

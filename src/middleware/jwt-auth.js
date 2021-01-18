@@ -9,12 +9,11 @@ async function requireAuth(req, res, next) {
   } else {
     bearerToken = authToken.slice(7, authToken.length)
   }
-
   try {
       
     const payload = jwtService.verifyJwt(bearerToken)
     let result = await UserService.hasUserWithUserName(payload.sub)
-    let user = await UserService.serializeUser(result[0])
+    let user = await UserService.serializeUser(result)
     if (!user){return res.status(401).json({ error: 'Unauthorized request' })}
     req.user = user
     next()
