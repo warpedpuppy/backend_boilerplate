@@ -7,12 +7,12 @@ dummyDataRouter
 .get('/', (req, res) => res.send('voila'))
 .post('/insert-dummy-data', async (req, res) => {
     let usersResult = await DummyDataService.insertUsers();
-    console.log(usersResult);
-    res.status(200).json({usersResult})
+    let resourcesResult = await DummyDataService.insertResources();
+    let memoirResult = await DummyDataService.insertMemoirs();
+    res.status(200).json({memoirResult, usersResult, resourcesResult})
 })
 .delete('/delete-dummy-data', async (req, res) => {
     let deleteResult = await DummyDataService.deleteData();
-    console.log(deleteResult);
     res.status(200).json({deleteResult})
 })
 
