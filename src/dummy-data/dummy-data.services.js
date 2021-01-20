@@ -30,13 +30,14 @@ const DummyDataService = {
         return { deleteResources, deleteUsers, deleteMemoirs };
     },
     insertResources: async function () {
-        let users = Users.find();
+        let users = await Users.find();
         this.userIDS = users.map( user => user._id )
 
         let resourceArray = []
         
         for (let i = 0; i < this.dummyQ; i ++) {
             let category = Config.RESOURCE_CATEGORIES[Math.floor(Math.random()*Config.RESOURCE_CATEGORIES.length - 1)]
+            console.log(this.userIDS[i])
             resourceArray.push({
                 name: faker.lorem.word(),
                 category,
