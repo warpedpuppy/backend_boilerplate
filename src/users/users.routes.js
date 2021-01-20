@@ -6,7 +6,10 @@ const jwtService = require('./jwts.service');
 const requireAuth = require('../middleware/jwt-auth');
 
 usersRouter
-.get('/', (req, res) => res.send('voila'))
+.get('/', async (req, res) =>{
+    let users = await UsersService.getAll();
+    res.status(200).json({users})
+})
 .post('/register', jsonBodyParser, async (req, res) => {
 
     const {username, password, email} = req.body;

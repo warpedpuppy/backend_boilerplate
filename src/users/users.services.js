@@ -4,6 +4,10 @@ const User = require('../models/user-model');
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
 
 const UsersService = {
+  getAll: async function () {
+    let users = await User.find();
+    return users.map( user => this.serializeUser(user))
+  },
   hasUserWithUserName(username) {
       return User.findOne({username})
       .then(name => name)
