@@ -14,7 +14,7 @@ const DummyDataService = {
             let name = faker.name.findName();
             usersArr.push({
                 username: name,
-                password: name,
+                password: "testing",
                 email:faker.internet.email(),
                 dummy: true
             })
@@ -36,12 +36,17 @@ const DummyDataService = {
         let resourceArray = []
         
         for (let i = 0; i < this.dummyQ; i ++) {
-            let category = Config.RESOURCE_CATEGORIES[Math.floor(Math.random()*Config.RESOURCE_CATEGORIES.length - 1)]
-            console.log(this.userIDS[i])
+            let categories = Object.keys(Config.RESOURCE_CATEGORIES)
+            let index = Math.floor(Math.random() * categories.length)
+            let category = categories[index]
             resourceArray.push({
                 name: faker.lorem.word(),
                 category,
-                description: faker.lorem.sentence(),
+                icon: Config.RESOURCE_CATEGORIES[category],
+                description: faker.lorem.paragraph(),
+                webSite: 'http://google.com',
+                email: "asdf@asdf.com", 
+                phone: "123.234.5678",
                 user: this.userIDS[i],
                 dummy: true
             })
