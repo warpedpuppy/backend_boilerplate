@@ -7,7 +7,7 @@ const Config = require('../config');
 resourcesRouter
 .get('/', requireAuth, async (req, res) => {
     let resources = await ResourceService.getResources(),
-        categories = Object.keys(Config.RESOURCE_CATEGORIES);
+        categories = Config.RESOURCE_CATEGORIES;
     if (resources) {
         res.status(200).json({categories, resources})
     } 

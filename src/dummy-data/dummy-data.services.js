@@ -36,13 +36,12 @@ const DummyDataService = {
         let resourceArray = []
         
         for (let i = 0; i < this.dummyQ; i ++) {
-            let categories = Object.keys(Config.RESOURCE_CATEGORIES)
+            let categories = Config.RESOURCE_CATEGORIES;
             let index = Math.floor(Math.random() * categories.length)
             let category = categories[index]
             resourceArray.push({
                 name: faker.lorem.word(),
                 category,
-                icon: Config.RESOURCE_CATEGORIES[category],
                 description: faker.lorem.paragraph(),
                 webSite: 'http://google.com',
                 email: "asdf@asdf.com", 
