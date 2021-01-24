@@ -58,7 +58,7 @@ const DummyDataService = {
         for (let i = 0; i < this.dummyQ; i ++) {
             memoirArray.push({
                 title: faker.lorem.sentence(),
-                subtitle: faker.lorem.sentences(),
+                subtitle: faker.lorem.sentence(),
                 text: faker.lorem.paragraphs(),
                 user: this.userIDS[i],
                 dummy: true
