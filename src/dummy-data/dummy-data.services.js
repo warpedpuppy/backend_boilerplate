@@ -49,8 +49,17 @@ const DummyDataService = {
                 user: this.userIDS[i],
                 dummy: true
             })
+            
         }
-        return await Resources.create(resourceArray);
+        let result = await Resources.create(resourceArray);
+        result.forEach( resource => {
+            Users.updateOne({_id: resource.user}, {$push: { resources: resource._id}}, {new: true},  function(err, doc) {
+                 //console.log(err, doc)
+            })
+           
+        })
+        
+        return result;
 
     },
     insertMemoirs: async function () {
@@ -64,7 +73,14 @@ const DummyDataService = {
                 dummy: true
             })
         }
-        return await Memoirs.create(memoirArray);
+        let result = await Memoirs.create(memoirArray);
+        result.forEach( memoir => {
+            Users.updateOne({_id: memoir.user}, {$push: { memoirs: memoir._id}}, {new: true},  function(err, doc) {
+                 //console.log(err, doc)
+            })
+           
+        })
+        return result;
 
     },
 

@@ -10,6 +10,10 @@ usersRouter
     let users = await UsersService.getAll();
     res.status(200).json({users})
 })
+.get('/:id', requireAuth, async (req, res) =>{
+    let user = await UsersService.getUser(req.params.id);
+    res.status(200).json({user})
+})
 .post('/register', jsonBodyParser, async (req, res) => {
 
     const {username, password, email} = req.body;

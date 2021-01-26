@@ -1,12 +1,18 @@
 const bcrypt = require('bcryptjs')
 const xss = require('xss')
 const User = require('../models/user-model');
+const Memoir = require('../models/memoir-model');
+const Resources = require('../models/resource-model');
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/
 
 const UsersService = {
   getAll: async function () {
     let users = await User.find();
     return users.map( user => this.serializeUser(user))
+  },
+  getUser: async function (_id) {
+    let user = await User.findOne({_id}).populate('memoirs', 'title');
+    return this.serializeUser(user);
   },
   hasUserWithUserName(username) {
       return User.findOne({username})
@@ -43,6 +49,7 @@ const UsersService = {
       id: user._id,
       username: xss(user.username),
       date_created: new Date(user.createdAt),
+      memoirs: user.memoirs || []
     }
   },
 }
