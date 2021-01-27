@@ -23,7 +23,7 @@ const UsersService = {
    
   },
   subscribe: async function (user, subscribeTo) {
-    let result = await User.updateOne({_id: user}, {$push: {subscriptions: subscribeTo} }, {new: true})
+    let result = await User.updateOne({_id: user}, {$addToSet: {subscriptions: subscribeTo} }, {new: true})
     return result;
   },
   getSubscriptions: async function (id) {
