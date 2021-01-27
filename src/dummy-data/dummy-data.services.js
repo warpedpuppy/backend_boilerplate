@@ -16,6 +16,8 @@ const DummyDataService = {
                 username: name,
                 password: "testing",
                 email:faker.internet.email(),
+                personalStatement: faker.lorem.paragraphs(),
+                imageRef: faker.image.avatar(),
                 dummy: true
             })
         }

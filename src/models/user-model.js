@@ -6,6 +6,9 @@ let userSchema = mongoose.Schema({
     username: {type: String, required: true},
     password: {type: String, required: true},
     email: {type: String, required: true},
+    personalStatement: {type: String, required: true},
+    imageRef: {type: String, required: true},
+    subscriptions: [{type: Schema.Types.ObjectId,  ref: "User"}],
     memoirs: [{type: Schema.Types.ObjectId,  ref: "Memoir"}],
     resources: [{type: Schema.Types.ObjectId,  ref: "Resource"}],
     dummy: {type: Boolean, default: false}

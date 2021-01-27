@@ -7,12 +7,27 @@ const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*
 
 const UsersService = {
   getAll: async function () {
-    let users = await User.find();
+    let users = await User.find({username: {$ne: "admin"}});
     return users.map( user => this.serializeUser(user))
   },
-  getUser: async function (_id) {
-    let user = await User.findOne({_id}).populate('memoirs', 'title');
-    return this.serializeUser(user);
+  getUser: async function (_id, withSubscriptions) {
+
+    if (!withSubscriptions) {
+      let user = await User.findOne({_id}).populate('memoirs', 'title');
+      user.subscriptions = undefined;
+      return this.serializeUser(user);
+    } else {
+      let user = await User.findOne({_id}).populate('memoirs', 'title').populate('subscriptions', 'username');
+      return this.serializeUser(user);
+    }
+   
+  },
+  subscribe: async function (user, subscribeTo) {
+    let result = await User.updateOne({_id: user}, {$push: {subscriptions: subscribeTo} }, {new: true})
+    return result;
+  },
+  getSubscriptions: async function (id) {
+    return await User.find({_id: id}).select('subscriptions');
   },
   hasUserWithUserName(username) {
       return User.findOne({username})
@@ -49,9 +64,12 @@ const UsersService = {
       id: user._id,
       username: xss(user.username),
       date_created: new Date(user.createdAt),
-      memoirs: user.memoirs || []
+      imageRef: xss(user.imageRef),
+      personalStatement: xss(user.personalStatement),
+      memoirs: user.memoirs || [],
+      subscriptions: user.subscriptions || []
     }
-  },
+  }
 }
 
 module.exports = UsersService

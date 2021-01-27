@@ -10,9 +10,19 @@ usersRouter
     let users = await UsersService.getAll();
     res.status(200).json({users})
 })
-.get('/:id', requireAuth, async (req, res) =>{
-    let user = await UsersService.getUser(req.params.id);
+.get('/user/:id', jsonBodyParser, requireAuth, async (req, res) =>{
+  
+    let getSubsciptions = req.userid === req.params.id ? true : false ; 
+    let user = await UsersService.getUser(req.params.id, getSubsciptions);
     res.status(200).json({user})
+})
+.get('/subscriptions', requireAuth, async (req, res) => {
+    let subscriptions = await UsersService.getSubscriptions(req.userid);
+    res.status(200).json({subscriptions})
+})
+.post('/subscribe', jsonBodyParser, requireAuth, async (req, res) =>{
+    let result = await UsersService.subscribe(req.body.user, req.body.subscribe)
+    res.status(200).json({data: result})
 })
 .post('/register', jsonBodyParser, async (req, res) => {
 
